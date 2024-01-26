@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Description } from "./Description/Description";
 import { Options } from "./Options/Options";
 import { Feedback } from "./Feedback/Feedback";
@@ -6,12 +6,29 @@ import { Notification } from "./Notification/Notification";
 
 
 export const App = () => {
-    const [feedback, setFeedback] = useState({
-        good: 0,
-        neutral: 0,
-        bad: 0
-    });
-    const [click, setClick] = useState(0);
+    const getFeedbackLocal = () => {
+        const saveFeedback = window.localStorage.getItem("saveFeedback");
+        if (saveFeedback === null) {
+            return {
+                good: 0,
+                neutral: 0,
+                bad: 0
+            };
+        }
+        return JSON.parse(saveFeedback);
+    };
+
+    const getClickLocal = () => {
+        const saveClick = window.localStorage.getItem("saveClick");
+        if (saveClick === null) {
+            return 0;
+        }
+        return JSON.parse(saveClick);
+    };
+
+    const [feedback, setFeedback] = useState(getFeedbackLocal);
+
+    const [click, setClick] = useState(getClickLocal);
 
     const handleFeedback = (type) => {
         setFeedback({
@@ -30,6 +47,12 @@ export const App = () => {
         });
         setClick(0);
     };
+
+    useEffect(() => {
+        window.localStorage.setItem("saveFeedback", JSON.stringify(feedback));
+        window.localStorage.setItem("saveClick", click);
+    }, [feedback, click]);
+
     const isHidden = click === 0;
 
     const onTotalFeedback = feedback.good + feedback.neutral + feedback.bad;

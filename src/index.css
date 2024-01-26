@@ -13,6 +13,7 @@
 body {
   font-size: sans-sarif;
   line-height: 1.5;
+  padding: 20px;
 }
 
 h1,
@@ -29,9 +30,15 @@ ul,
 ol {
   margin: 0;
   padding: 0;
+
+}
+
+li {
+  list-style: none;
 }
 
 img {
   display: block;
   max-width: 100%;
+
 }
